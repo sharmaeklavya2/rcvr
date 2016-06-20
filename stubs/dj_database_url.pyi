@@ -1,0 +1,3 @@
+from typing import Any, Dict
+
+def config() -> Dict[str, Any]: ...

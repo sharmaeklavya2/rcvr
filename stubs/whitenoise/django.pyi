@@ -1,0 +1,3 @@
+from django.core.handlers.wsgi import WSGIHandler
+
+def DjangoWhiteNoise(x: WSGIHandler) -> WSGIHandler: ...
