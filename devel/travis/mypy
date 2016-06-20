@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+set -x
+
+devel/run_mypy.py
+devel/run_mypy.py --py2

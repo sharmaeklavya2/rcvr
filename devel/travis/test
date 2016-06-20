@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+set -x
+
+# lint
+devel/lint_all.py
+
+# db
+python manage.py makemigrations
+python manage.py migrate
