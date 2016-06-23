@@ -3,18 +3,24 @@ from __future__ import unicode_literals
 import datetime
 from django.db import models
 
-from six import text_type
+from six import text_type, python_2_unicode_compatible
 from typing import Optional, Tuple
 
 address_help_text = """Please don't include your district, city, state in your address.
 That will be extracted from your PIN code"""
 
+@python_2_unicode_compatible
 class State(models.Model):
     scode = models.CharField('State Code', max_length=3, primary_key=True) # type: text_type
     name = models.CharField(max_length=30, unique=True) # type: text_type
     class Meta(object):
         db_table = 'State'
 
+    def __str__(self):
+        # type: () -> str
+        return self.name # type: ignore
+
+@python_2_unicode_compatible
 class District(models.Model):
     pin = models.PositiveIntegerField(primary_key=True) # type: int
     name = models.CharField(max_length=60, blank=True) # type: text_type
@@ -22,6 +28,11 @@ class District(models.Model):
     class Meta(object):
         db_table = 'District'
 
+    def __str__(self):
+        # type: () -> str
+        return self.name + ": " + self.state.name # type: ignore
+
+@python_2_unicode_compatible
 class SubDistrict(models.Model):
     pin = models.PositiveIntegerField() # type: int
     name = models.CharField(max_length=60, blank=True) # type: text_type
@@ -30,11 +41,20 @@ class SubDistrict(models.Model):
         db_table = 'SubDistrict'
         unique_together = (('pin', 'district'),)
 
+    def pincode(self):
+        # type: () -> int
+        return self.pin + self.district.pin * 1000
+
+    def __str__(self):
+        # type: () -> str
+        return "{}: {} ({})".format(self.name, self.district.name, self.pincode()) # type: ignore
+
 SCHOOL_CHOICES = (
     ('J', 'Junior'),
     ('Y', 'Youth'),
 ) # type: Tuple[Tuple[text_type, text_type], ...]
 
+@python_2_unicode_compatible
 class School(models.Model):
     name = models.CharField(max_length=30) # type: text_type
     school_type = models.CharField('Type', max_length=1, choices=SCHOOL_CHOICES) # type: text_type
@@ -51,12 +71,17 @@ class School(models.Model):
     class Meta(object):
         db_table = 'School'
 
+    def __str__(self):
+        # type: () -> str
+        return "{}: {}".format(self.id, self.name) # type: ignore
+
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
     ('O', 'Other'),
 ) # type: Tuple[Tuple[text_type, text_type], ...]
 
+@python_2_unicode_compatible
 class Volunteer(models.Model):
     create_stamp = models.DateTimeField('Created', auto_now_add=True) # type: datetime.datetime
     update_stamp = models.DateTimeField('Last Updated', auto_now=True) # type: datetime.date
@@ -81,6 +106,10 @@ class Volunteer(models.Model):
     class Meta(object):
         db_table = 'Volunteer'
 
+    def __str__(self):
+        # type: () -> str
+        return self.name # type: ignore
+
     def volunteer_type(self):
         # type: () -> text_type
         if self.school is None:
@@ -97,6 +126,7 @@ class Volunteer(models.Model):
             return self.subdistrict.district.state
     state.admin_order_field = 'subdistrict__district__state' # type: ignore
 
+@python_2_unicode_compatible
 class Registration(models.Model):
     start = models.DateField() # type: datetime.date
     end = models.DateField() # tyep: datetime.date
@@ -104,3 +134,7 @@ class Registration(models.Model):
 
     class Meta(object):
         db_table = 'Registration'
+
+    def __str__(self):
+        # type: () -> str
+        return "{}({} - {})".format(self.volunteer, self.start, self.end) # type: ignore
