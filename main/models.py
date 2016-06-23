@@ -5,6 +5,7 @@ from django.db import models
 
 from six import text_type, python_2_unicode_compatible
 from typing import Optional, Tuple
+from lib import mypy_dummy
 
 address_help_text = """Please don't include your district, city, state in your address.
 That will be extracted from your PIN code"""
@@ -13,6 +14,8 @@ That will be extracted from your PIN code"""
 class State(models.Model):
     scode = models.CharField('State Code', max_length=3, primary_key=True) # type: text_type
     name = models.CharField(max_length=30, unique=True) # type: text_type
+
+    objects = mypy_dummy.dummyStateManager()
     class Meta(object):
         db_table = 'State'
 
@@ -25,6 +28,8 @@ class District(models.Model):
     pin = models.PositiveIntegerField(primary_key=True) # type: int
     name = models.CharField(max_length=60, blank=True) # type: text_type
     state = models.ForeignKey(State) # type: State
+
+    objects = mypy_dummy.dummyDistrictManager()
     class Meta(object):
         db_table = 'District'
 
@@ -37,6 +42,8 @@ class SubDistrict(models.Model):
     pin = models.PositiveIntegerField() # type: int
     name = models.CharField(max_length=60, blank=True) # type: text_type
     district = models.ForeignKey(District) # type: District
+
+    objects = mypy_dummy.dummySubDistrictManager()
     class Meta(object):
         db_table = 'SubDistrict'
         unique_together = (('pin', 'district'),)
@@ -68,6 +75,7 @@ class School(models.Model):
     counsellor_phone = models.BigIntegerField("Counsellor's phone", null=True,
         blank=True) # type: Optional[int]
 
+    objects = mypy_dummy.dummySchoolManager()
     class Meta(object):
         db_table = 'School'
 
@@ -103,6 +111,7 @@ class Volunteer(models.Model):
         null=True, related_name="perm_volunteer_set") # type: Optional[SubDistrict]
     school = models.ForeignKey(School, null=True, blank=True) # type: Optional[School]
 
+    objects = mypy_dummy.dummyVolunteerManager()
     class Meta(object):
         db_table = 'Volunteer'
 
@@ -132,6 +141,7 @@ class Registration(models.Model):
     end = models.DateField() # tyep: datetime.date
     volunteer = models.ForeignKey(Volunteer) # type: Volunteer
 
+    objects = mypy_dummy.dummyRegistrationManager()
     class Meta(object):
         db_table = 'Registration'
 

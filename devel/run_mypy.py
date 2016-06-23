@@ -13,7 +13,9 @@ import six
 from six import text_type
 from typing import cast, List
 
-exclude = [] # type: List[str]
+exclude = """
+lib/mypy_dummy.py
+""".split() # type: List[str]
 
 parser = argparse.ArgumentParser(description="Run mypy on files tracked by git.")
 parser.add_argument('targets', nargs='*', default=[],
