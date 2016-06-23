@@ -2,10 +2,21 @@ from django.db.models import Model
 from django.urls import RegexURLPattern
 
 from six import text_type
-from typing import Any, AnyStr, Iterable, List, Optional, Tuple, Union
+from typing import Any, AnyStr, Iterable, List, Mapping, Optional, Sequence, Tuple, Union
 
-class ModelAdmin(object):
-    list_display = ... # type: Tuple[text_type, ...]
+class BaseModelAdmin(object):
+    pass
+
+class ModelAdmin(BaseModelAdmin):
+    list_display = ... # type: Sequence[text_type]
+    radio_fields = ... # type: Mapping[text_type, int]
+    inlines = ... # type: Sequence[Any]
+
+class InlineModelAdmin(BaseModelAdmin):
+    model = ... # type: type
+
+class StackedInline(InlineModelAdmin):
+    pass
 
 class AdminSite(object):
     site_title = ... # type: text_type
@@ -18,3 +29,5 @@ class AdminSite(object):
         ...
 
 site = ... # type: AdminSite
+HORIZONTAL = ... # type: int
+VERTICAL = ... # type: int
