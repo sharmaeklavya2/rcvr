@@ -13,7 +13,7 @@ That will be extracted from your PIN code"""
 @python_2_unicode_compatible
 class State(models.Model):
     scode = models.CharField('State Code', max_length=3, primary_key=True) # type: text_type
-    name = models.CharField(max_length=30, unique=True) # type: text_type
+    name = models.CharField('State Name', max_length=30, unique=True) # type: text_type
 
     objects = mypy_dummy.dummyStateManager()
     class Meta(object):
@@ -25,8 +25,8 @@ class State(models.Model):
 
 @python_2_unicode_compatible
 class District(models.Model):
-    pin = models.PositiveIntegerField(primary_key=True) # type: int
-    name = models.CharField(max_length=60, blank=True) # type: text_type
+    pin = models.PositiveIntegerField('District PIN', primary_key=True) # type: int
+    name = models.CharField('District Name', max_length=60, blank=True) # type: text_type
     state = models.ForeignKey(State) # type: State
 
     objects = mypy_dummy.dummyDistrictManager()
@@ -39,8 +39,8 @@ class District(models.Model):
 
 @python_2_unicode_compatible
 class SubDistrict(models.Model):
-    pin = models.PositiveIntegerField() # type: int
-    name = models.CharField(max_length=60, blank=True) # type: text_type
+    pin = models.PositiveIntegerField('Sub-District PIN') # type: int
+    name = models.CharField('Sub-District Name', max_length=60, blank=True) # type: text_type
     district = models.ForeignKey(District) # type: District
 
     objects = mypy_dummy.dummySubDistrictManager()
@@ -63,7 +63,7 @@ SCHOOL_CHOICES = (
 
 @python_2_unicode_compatible
 class School(models.Model):
-    name = models.CharField(max_length=30) # type: text_type
+    name = models.CharField('School Name', max_length=30) # type: text_type
     school_type = models.CharField('Type', max_length=1, choices=SCHOOL_CHOICES) # type: text_type
     base_address = models.CharField('Address', max_length=250,
         help_text=address_help_text) # type: text_type
