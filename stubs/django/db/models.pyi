@@ -6,17 +6,41 @@ class Model(object):
         # type: (Iterable[text_type]) -> None
         ...
 
-def BooleanField(name=None, default=None, blank=False, null=False, *args, **kwargs):
-    # type: (Optional[text_type], Optional[bool], bool, bool, *Any, **Any) -> bool
+def ForeignKey(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
     ...
-def CharField(name=None, default=None, max_length=None, blank=False, null=False, *args, **kwargs):
-    # type: (Optional[text_type], Optional[bool], Optional[int], bool, bool, *Any, **Any) -> text_type
+def OneToOneField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
     ...
-def TextField(name=None, default=None, blank=False, null=False, *args, **kwargs):
-    # type: (Optional[text_type], Optional[bool], bool, bool, *Any, **Any) -> text_type
+def ManyToManyField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
     ...
-def ForeignKey(field, blank=False, null=False, *args, **kwargs):
-    # type: (Any, bool, bool, *Any, **Any) -> Any
+def BooleanField(*args, **kwargs):
+    # type: (*Any, **Any) -> bool
+    ...
+def CharField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def TextField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def IntegerField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def BigIntegerField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def PositiveIntegerField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def EmailField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def DateField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
+    ...
+def DateTimeField(*args, **kwargs):
+    # type: (*Any, **Any) -> Any
     ...
 
 ModelT = TypeVar('ModelT', bound=Model)
