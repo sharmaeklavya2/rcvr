@@ -18,6 +18,9 @@ class InlineModelAdmin(BaseModelAdmin):
 class StackedInline(InlineModelAdmin):
     pass
 
+class TabularInline(InlineModelAdmin):
+    pass
+
 class AdminSite(object):
     site_title = ... # type: text_type
     site_header = ... # type: text_type

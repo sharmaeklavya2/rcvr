@@ -7,7 +7,7 @@ from main.models import Volunteer, School, State, District, SubDistrict, Registr
 from six import text_type
 from typing import Mapping, Tuple
 
-class RegistrationInline(admin.StackedInline):
+class RegistrationInline(admin.TabularInline):
     model = Registration
 
 class VolunteerAdmin(admin.ModelAdmin):
