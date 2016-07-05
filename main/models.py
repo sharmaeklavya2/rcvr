@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import datetime
 from django.db import models
+from django.core.validators import RegexValidator
 
 from six import text_type, python_2_unicode_compatible
 from typing import Optional, Tuple
@@ -95,7 +96,8 @@ class Volunteer(models.Model):
     update_stamp = models.DateTimeField('Last Updated', auto_now=True) # type: datetime.date
 
     name = models.CharField(max_length=100) # type: text_type
-    aadharid = models.BigIntegerField('Aadhar ID', unique=True) # type: int
+    aadharid = models.CharField('Aadhar ID', max_length=12, unique=True,
+        validators=[RegexValidator(regex=r'\d{12}', message='Invalid Aadhar ID')]) # type: int
     phone = models.BigIntegerField() # type: int
 
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES) # type: text_type

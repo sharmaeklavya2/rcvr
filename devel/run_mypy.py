@@ -43,7 +43,7 @@ if six.PY2:
     print("Warning: You're running python 2.")
 if python_files:
     os.environ["MYPYPATH"] = os.path.join(BASE_DIR, "stubs")
-    base_args = ['mypy', "--disallow-untyped-defs", "--fast-parser"]
+    base_args = ['mypy', "--disallow-untyped-defs", "--fast-parser", "--silent-imports"]
     rc1 = subprocess.call(base_args + py2arg + python_files)
     os.chdir('devel')
     rc2 = subprocess.call(base_args + py2arg + lister_files)

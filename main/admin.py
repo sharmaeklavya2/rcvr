@@ -13,7 +13,7 @@ class RegistrationInline(admin.TabularInline):
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = ('aadharid', 'name', 'volunteer_type', 'phone', 'gender',
         'subdistrict', 'state')
-    search_fields = ('name', 'email', 'base_address', 'skills', 'school__name',
+    search_fields = ('=aadharid', 'name', 'email', 'base_address', 'skills', 'school__name',
         'subdistrict__name', 'subdistrict__district__name')
     list_filter = ('gender', 'school__school_type', 'subdistrict__district__state__name')
     radio_fields = {'gender': admin.VERTICAL}
