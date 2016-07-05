@@ -90,14 +90,16 @@ GENDER_CHOICES = (
     ('O', 'Other'),
 ) # type: Tuple[Tuple[text_type, text_type], ...]
 
+AADHAR_LENGTH = 12
+
 @python_2_unicode_compatible
 class Volunteer(models.Model):
     create_stamp = models.DateTimeField('Created', auto_now_add=True) # type: datetime.datetime
     update_stamp = models.DateTimeField('Last Updated', auto_now=True) # type: datetime.date
 
     name = models.CharField(max_length=100) # type: text_type
-    aadharid = models.CharField('Aadhar ID', max_length=12, unique=True,
-        validators=[RegexValidator(regex=r'\d{12}', message='Invalid Aadhar ID')]) # type: int
+    aadharid = models.CharField('Aadhar ID', max_length=AADHAR_LENGTH, unique=True,
+        validators=[RegexValidator(regex=r'\d{%s}' % (AADHAR_LENGTH,), message='Invalid Aadhar ID')]) # type: int
     phone = models.BigIntegerField() # type: int
 
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES) # type: text_type
