@@ -1,21 +1,42 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.http import HttpRequest
+from django.db.models import QuerySet
 
 from main.models import Volunteer, School, State, District, SubDistrict, Registration
 
 from six import text_type
-from typing import Mapping, Tuple
+from typing import Mapping, Sequence, Tuple
 
 class RegistrationInline(admin.TabularInline):
     model = Registration
+
+class VTypeListFilter(admin.SimpleListFilter):
+    title = "Volunteer Type"
+    parameter_name = 'vtype'
+
+    def lookups(self, request, model_admin):
+        # type: (HttpRequest, admin.ModelAdmin) -> Sequence[Tuple[text_type, text_type]]
+        return (
+            ('J', "Junior"),
+            ('Y', "Youth"),
+            ('C', "Community"),
+        )
+
+    def queryset(self, request, queryset):
+        # type: (HttpRequest, QuerySet[Volunteer]) -> QuerySet[Volunteer]
+        if self.value() == 'C':
+            return queryset.filter(school__isnull=True)
+        elif self.value():
+            return queryset.filter(school__school_type=self.value())
 
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = ('aadharid', 'name', 'volunteer_type', 'phone', 'gender',
         'subdistrict', 'state')
     search_fields = ('=aadharid', 'name', 'email', 'base_address', 'skills', 'school__name',
         'subdistrict__name', 'subdistrict__district__name')
-    list_filter = ('gender', 'school__school_type', 'subdistrict__district__state__name')
+    list_filter = ('gender', VTypeListFilter, 'subdistrict__district__state__name')
     radio_fields = {'gender': admin.VERTICAL}
     inlines = (RegistrationInline,)
     raw_id_fields = ('school', 'subdistrict', 'perm_subdistrict')
