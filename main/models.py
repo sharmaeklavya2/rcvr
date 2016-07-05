@@ -9,7 +9,7 @@ from typing import Optional, Tuple
 from lib import mypy_dummy
 
 address_help_text = """Please don't include your district, city, state in your address.
-That will be extracted from your PIN code"""
+That will be extracted from your Sub-district/PIN code"""
 
 @python_2_unicode_compatible
 class State(models.Model):
@@ -36,7 +36,7 @@ class District(models.Model):
 
     def __str__(self):
         # type: () -> str
-        return self.name + ": " + self.state.name # type: ignore
+        return "{} ({}, {})".format(self.pin, self.name or "-", self.state.name) # type: ignore
 
 @python_2_unicode_compatible
 class SubDistrict(models.Model):
@@ -55,7 +55,7 @@ class SubDistrict(models.Model):
 
     def __str__(self):
         # type: () -> str
-        return "{}: {} ({})".format(self.name, self.district.name, self.pincode()) # type: ignore
+        return "{} ({}, {}, {})".format(self.pincode(), self.name or "-", self.district.name or "-", self.district.state.name) # type: ignore
 
 SCHOOL_CHOICES = (
     ('J', 'Junior'),
