@@ -18,6 +18,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     list_filter = ('gender', 'school__school_type', 'subdistrict__district__state__name')
     radio_fields = {'gender': admin.VERTICAL}
     inlines = (RegistrationInline,)
+    raw_id_fields = ('school', 'subdistrict', 'perm_subdistrict')
 
 class SchoolAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'school_type', 'base_address', 'subdistrict', 'phone')
@@ -25,6 +26,7 @@ class SchoolAdmin(admin.ModelAdmin):
         'subdistrict__district__name')
     list_filter = ('school_type', 'subdistrict__district__state__name',)
     radio_fields = {'school_type': admin.VERTICAL}
+    raw_id_fields = ('subdistrict',)
 
 class StateAdmin(admin.ModelAdmin):
     list_display = ('scode', 'name',)
@@ -39,6 +41,7 @@ class SubDistrictAdmin(admin.ModelAdmin):
     list_display = ('pin', 'name', 'district')
     search_fields = ('name', 'district__name')
     list_filter = ('district__state__name',)
+    raw_id_fields = ('district',)
 
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(School, SchoolAdmin)
