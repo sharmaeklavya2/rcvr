@@ -3,8 +3,10 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.http import HttpRequest
 from django.db.models import QuerySet
+from django.utils import timezone
 
 from main.models import Volunteer, School, State, District, SubDistrict, Registration
+from lib.status import filter_by_active, get_status
 
 from six import text_type
 from typing import Mapping, Sequence, Tuple
@@ -31,12 +33,31 @@ class VTypeListFilter(admin.SimpleListFilter):
         elif self.value():
             return queryset.filter(school__school_type=self.value())
 
+class ActiveListFilter(admin.SimpleListFilter):
+    title = "Status"
+    parameter_name = 'active'
+
+    def lookups(self, request, model_admin):
+        # type: (HttpRequest, admin.ModelAdmin) -> Sequence[Tuple[text_type, text_type]]
+        return (
+            ('true', "Active"),
+            ('false', "Inactive"),
+        )
+
+    def queryset(self, request, queryset):
+        # type: (HttpRequest, QuerySet[Volunteer]) -> QuerySet[Volunteer]
+        today = timezone.now().date()
+        if self.value() == 'true':
+            return filter_by_active(queryset, today, True)
+        elif self.value() == 'false':
+            return filter_by_active(queryset, today, False)
+
 class VolunteerAdmin(admin.ModelAdmin):
-    list_display = ('aadharid', 'name', 'volunteer_type', 'phone', 'gender',
+    list_display = ('aadharid', 'name', 'volunteer_type', get_status, 'phone', 'gender',
         'subdistrict', 'state')
     search_fields = ('=aadharid', 'name', 'email', 'base_address', 'skills', 'school__name',
         'subdistrict__name', 'subdistrict__district__name')
-    list_filter = ('gender', VTypeListFilter, 'subdistrict__district__state__name')
+    list_filter = ('gender', VTypeListFilter, ActiveListFilter, 'subdistrict__district__state__name')
     radio_fields = {'gender': admin.VERTICAL}
     inlines = (RegistrationInline,)
     raw_id_fields = ('school', 'subdistrict', 'perm_subdistrict')
