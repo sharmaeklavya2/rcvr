@@ -63,7 +63,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     raw_id_fields = ('school', 'subdistrict', 'perm_subdistrict')
 
 class SchoolAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'school_type', 'base_address', 'subdistrict', 'phone')
+    list_display = ('id', 'name', 'school_type', 'base_address', 'subdistrict', 'phone')
     search_fields = ('name', 'base_address', 'counsellor_name', 'subdistrict__name',
         'subdistrict__district__name')
     list_filter = ('school_type', 'subdistrict__district__state__name',)
@@ -80,7 +80,7 @@ class DistrictAdmin(admin.ModelAdmin):
     list_filter = ('state__name',)
 
 class SubDistrictAdmin(admin.ModelAdmin):
-    list_display = ('pin', 'name', 'district')
+    list_display = ('id', 'pin', 'name', 'district')
     search_fields = ('name', 'district__name')
     list_filter = ('district__state__name',)
     raw_id_fields = ('district',)
