@@ -9,7 +9,7 @@ import os
 import six
 
 from main.models import Volunteer, Registration, AADHAR_LENGTH
-from lib.status import filter_by_active
+from lib.status import filter_by_active, get_status
 
 from six import text_type
 
@@ -23,6 +23,44 @@ def make_vol(name):
     return Volunteer.objects.create(name=name, aadharid=aid, phone=0)
 
 class TestFilter(TestCase):
+
+    def test_get_status(self):
+        # type: () -> None
+        vol1 = make_vol('vol1')
+        vol2 = make_vol('vol2')
+        vol3 = make_vol('vol3')
+
+        d0 = date(2000, 1, 1)
+        d1 = date(2001, 1, 1)
+        d2 = date(2002, 1, 1)
+        d3 = date(2003, 1, 1)
+        d4 = date(2004, 1, 1)
+        d5 = date(2005, 1, 1)
+
+        Registration.objects.create(start=d0, end=d2, volunteer=vol1)
+        Registration.objects.create(start=d1, end=d3, volunteer=vol2)
+        Registration.objects.create(start=d2, end=d4, volunteer=vol2)
+
+        self.assertTrue(get_status(vol1, d0))
+        self.assertTrue(get_status(vol1, d1))
+        self.assertTrue(get_status(vol1, d2))
+        self.assertFalse(get_status(vol1, d3))
+        self.assertFalse(get_status(vol1, d4))
+        self.assertFalse(get_status(vol1, d5))
+
+        self.assertFalse(get_status(vol2, d0))
+        self.assertTrue(get_status(vol2, d1))
+        self.assertTrue(get_status(vol2, d2))
+        self.assertTrue(get_status(vol2, d3))
+        self.assertTrue(get_status(vol2, d4))
+        self.assertFalse(get_status(vol2, d5))
+
+        self.assertFalse(get_status(vol3, d0))
+        self.assertFalse(get_status(vol3, d1))
+        self.assertFalse(get_status(vol3, d2))
+        self.assertFalse(get_status(vol3, d3))
+        self.assertFalse(get_status(vol3, d4))
+        self.assertFalse(get_status(vol3, d5))
 
     def test_filter_by_active(self):
         # type: () -> None
