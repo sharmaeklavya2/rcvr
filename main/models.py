@@ -59,8 +59,8 @@ class SubDistrict(models.Model):
         return "{} ({}, {}, {})".format(self.pincode(), self.name or "-", self.district.name or "-", self.district.state.name) # type: ignore
 
 SCHOOL_CHOICES = (
-    ('J', 'Junior'),
-    ('Y', 'Youth'),
+    ('S', 'School'),
+    ('C', 'College'),
 ) # type: Tuple[Tuple[text_type, text_type], ...]
 
 @python_2_unicode_compatible
@@ -81,6 +81,7 @@ class School(models.Model):
     objects = mypy_dummy.dummySchoolManager()
     class Meta(object):
         db_table = 'School'
+        verbose_name = 'School/College'
 
     def __str__(self):
         # type: () -> str
@@ -129,9 +130,13 @@ class Volunteer(models.Model):
     def volunteer_type(self):
         # type: () -> text_type
         if self.school is None:
-            return 'C'
+            return 'Community'
+        elif self.school.school_type == 'S':
+            return 'Junior'
+        elif self.school.school_type == 'C':
+            return 'Youth'
         else:
-            return self.school.school_type
+            return 'Unknown'
     volunteer_type.admin_order_field = 'school__school_type' # type: ignore
 
     def state(self):

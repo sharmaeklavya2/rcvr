@@ -30,8 +30,10 @@ class VTypeListFilter(admin.SimpleListFilter):
         # type: (HttpRequest, QuerySet[Volunteer]) -> QuerySet[Volunteer]
         if self.value() == 'C':
             return queryset.filter(school__isnull=True)
-        elif self.value():
-            return queryset.filter(school__school_type=self.value())
+        elif self.value() == 'J':
+            return queryset.filter(school__school_type='S')
+        elif self.value() == 'Y':
+            return queryset.filter(school__school_type='C')
 
 class ActiveListFilter(admin.SimpleListFilter):
     title = "Status"
