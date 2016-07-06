@@ -40,6 +40,7 @@ class District(models.Model):
 
 @python_2_unicode_compatible
 class SubDistrict(models.Model):
+    id = 0 # type: int
     pin = models.PositiveIntegerField('Sub-District PIN') # type: int
     name = models.CharField('Sub-District Name', max_length=60, blank=True) # type: text_type
     district = models.ForeignKey(District) # type: District
@@ -64,6 +65,7 @@ SCHOOL_CHOICES = (
 
 @python_2_unicode_compatible
 class School(models.Model):
+    id = 0 # type: int
     name = models.CharField('School Name', max_length=30) # type: text_type
     school_type = models.CharField('Type', max_length=1, choices=SCHOOL_CHOICES) # type: text_type
     base_address = models.CharField('Address', max_length=250,
@@ -94,6 +96,7 @@ AADHAR_LENGTH = 12
 
 @python_2_unicode_compatible
 class Volunteer(models.Model):
+    id = 0 # type: int
     create_stamp = models.DateTimeField('Created', auto_now_add=True) # type: datetime.datetime
     update_stamp = models.DateTimeField('Last Updated', auto_now=True) # type: datetime.date
 
@@ -141,6 +144,7 @@ class Volunteer(models.Model):
 
 @python_2_unicode_compatible
 class Registration(models.Model):
+    id = 0 # type: int
     start = models.DateField() # type: datetime.date
     end = models.DateField() # tyep: datetime.date
     volunteer = models.ForeignKey(Volunteer) # type: Volunteer
