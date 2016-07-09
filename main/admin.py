@@ -82,7 +82,8 @@ class DistrictAdmin(admin.ModelAdmin):
     list_filter = ('state__name',)
 
 class SubDistrictAdmin(admin.ModelAdmin):
-    list_display = ('id', 'pin', 'name', 'district')
+    fields = ('district', 'pin', 'name')
+    list_display = ('pincode', 'name', 'district')
     search_fields = ('name', 'district__name')
     list_filter = ('district__state__name',)
     raw_id_fields = ('district',)

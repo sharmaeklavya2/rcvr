@@ -5,7 +5,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 from six import text_type, python_2_unicode_compatible
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 from lib import mypy_dummy
 
 address_help_text = """Please don't include your district, city, state in your address.
@@ -40,7 +40,7 @@ class District(models.Model):
 
 @python_2_unicode_compatible
 class SubDistrict(models.Model):
-    id = 0 # type: int
+    pincode = models.PositiveIntegerField('PIN Code', primary_key=True)
     pin = models.PositiveIntegerField('Sub-District PIN') # type: int
     name = models.CharField('Sub-District Name', max_length=60, blank=True) # type: text_type
     district = models.ForeignKey(District) # type: District
@@ -50,13 +50,21 @@ class SubDistrict(models.Model):
         db_table = 'SubDistrict'
         unique_together = (('pin', 'district'),)
 
-    def pincode(self):
+    def get_pincode(self):
         # type: () -> int
         return self.pin + self.district.pin * 1000
 
     def __str__(self):
         # type: () -> str
-        return "{} ({}, {}, {})".format(self.pincode(), self.name or "-", self.district.name or "-", self.district.state.name) # type: ignore
+        name = self.name or "-"
+        district = self.district.name or "-"
+        state = self.district.state.name or "-"
+        return "{} ({}, {}, {})".format(self.pincode, name, district, state) # type: ignore
+
+    def save(self, *args, **kwargs):
+        # type: (*Any, **Any) -> None
+        self.pincode = self.get_pincode()
+        super(SubDistrict, self).save(*args, **kwargs)
 
 SCHOOL_CHOICES = (
     ('S', 'School'),
