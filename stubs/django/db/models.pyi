@@ -5,6 +5,9 @@ class Model(object):
     def save(self, update_fields=[]):
         # type: (Iterable[text_type]) -> None
         ...
+    def __init__(self, *args, **kwargs):
+        # type: (*Any, **Any) -> None
+        ...
 
 def ForeignKey(*args, **kwargs):
     # type: (*Any, **Any) -> Any
@@ -103,6 +106,9 @@ class QuerySet(Generic[ModelT], Sequence):
 class Manager(Generic[ModelT], QuerySet):
     def create(self, **kwargs):
         # type: (**Any) -> ModelT
+        ...
+    def bulk_create(self, objs, batch_size=None):
+        # type: (Sequence[ModelT], Optional[int]) -> None
         ...
     def get_or_create(self, **kwargs):
         # type: (**Any) -> Tuple[ModelT, bool]
