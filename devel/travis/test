@@ -10,3 +10,4 @@ devel/lint_all.py
 python manage.py makemigrations
 python manage.py migrate
 python manage.py test
+python scripts/load_all_locs.py sample_data
