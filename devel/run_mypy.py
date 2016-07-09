@@ -15,6 +15,7 @@ from typing import cast, List
 
 exclude = """
 lib/mypy_dummy.py
+main/migrations/
 """.split() # type: List[str]
 
 parser = argparse.ArgumentParser(description="Run mypy on files tracked by git.")

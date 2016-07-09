@@ -9,8 +9,6 @@ output.txt
 /project_conf/settings/local.py
 /staticfiles/
 /extstatic/
-/main/migrations/*
-!/main/migrations/__init__.py
 
 # private
 secret.txt
