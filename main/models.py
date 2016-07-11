@@ -125,7 +125,7 @@ class Volunteer(models.Model):
         help_text=address_help_text) # type: text_type
     perm_subdistrict = models.ForeignKey(SubDistrict, verbose_name='Permanent Sub-Discrict',
         null=True, related_name="perm_volunteer_set") # type: Optional[SubDistrict]
-    school = models.ForeignKey(School, null=True, blank=True) # type: Optional[School]
+    school = models.ForeignKey(School, verbose_name="School/College", null=True, blank=True) # type: Optional[School]
 
     objects = mypy_dummy.dummyVolunteerManager()
     class Meta(object):
