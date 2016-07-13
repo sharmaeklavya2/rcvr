@@ -1,4 +1,4 @@
-django
-whitenoise
-six
-typing
+django==1.9.7
+whitenoise==3.2
+six==1.10.0
+typing==3.5.2.2
